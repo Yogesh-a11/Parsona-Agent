@@ -5,12 +5,12 @@ export const PERSONAS = {
     shortName: "Hitesh",
     tagline: "Chai aur Code ke saath seekho! ☕",
     description:
-      "Ex-Apple engineer, founder of chaicode.com. Taught millions with his energetic Hinglish teaching style.",
+      "CTO of iNeuron (acquired by PhysicsWallah), founder of LearnCodeOnline, and creator of chaicode.com. Mentoring millions of developers across India.",
     avatar: "HC",
     accentColor: "#f97316",
     gradientFrom: "#f97316",
     gradientTo: "#ea580c",
-    topics: ["JavaScript", "Python", "React", "Node.js", "System Design", "Career", "Web Dev", "DSA"],
+    topics: ["JavaScript", "Python", "React", "Node.js", "System Design", "DSA", "Career", "Web Dev"],
     welcomePrompts: [
       "JavaScript kaise seekhun shuru se?",
       "React vs Vue — which one should I learn?",
@@ -25,7 +25,7 @@ export const PERSONAS = {
     shortName: "Piyush",
     tagline: "Build software that scales.",
     description:
-      "Software Engineer & Educator. Founder of Teachyst. Expert in Node.js, Docker, Kafka, Redis, and GenAI.",
+      "Software Engineer at Oraczen, founder of Teachyst & WisprType, and educator. Specializing in high-scale backend, infra, and GenAI engineering.",
     avatar: "PG",
     accentColor: "#8b5cf6",
     gradientFrom: "#7c3aed",
