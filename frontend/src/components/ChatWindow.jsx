@@ -9,53 +9,50 @@ export default function ChatWindow({ persona, messages, isStreaming, onSendMessa
   const personaData = PERSONAS[persona];
 
   const shouldAutoScroll = useRef(true);
-  // timestamp-based guard instead of a boolean that gets consumed by the
-  // first scroll event of a smooth-scroll animation
-  const programmaticScrollUntil = useRef(0);
-
-  // drives the visible "jump to bottom" button (refs don't trigger re-renders)
+  const lastScrollTop = useRef(0);
   const [showJumpButton, setShowJumpButton] = useState(false);
 
   const scrollToBottom = useCallback((smooth = true) => {
     if (!bottomRef.current) return;
-    // smooth scrolls fire many 'scroll' events over ~300-400ms; block the
-    // whole window instead of just the next single event
-    programmaticScrollUntil.current = Date.now() + (smooth ? 500 : 50);
     bottomRef.current.scrollIntoView({ behavior: smooth ? "smooth" : "instant" });
     shouldAutoScroll.current = true;
     setShowJumpButton(false);
   }, []);
 
-  // detect if user manually scrolled up -> disable auto-scroll + show button
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
-      if (Date.now() < programmaticScrollUntil.current) return;
+      const currentScrollTop = container.scrollTop;
 
+      // If user scrolled UP, immediately disable auto-scroll
+      if (currentScrollTop < lastScrollTop.current - 2) {
+        shouldAutoScroll.current = false;
+        setShowJumpButton(true);
+      }
+
+      // If user scrolled to the very bottom, re-enable auto-scroll
       const distanceFromBottom =
-        container.scrollHeight - container.scrollTop - container.clientHeight;
-      const atBottom = distanceFromBottom < 80;
+        container.scrollHeight - currentScrollTop - container.clientHeight;
+      if (distanceFromBottom < 15) {
+        shouldAutoScroll.current = true;
+        setShowJumpButton(false);
+      }
 
-      shouldAutoScroll.current = atBottom;
-      setShowJumpButton(!atBottom);
+      lastScrollTop.current = currentScrollTop;
     };
 
     container.addEventListener("scroll", handleScroll, { passive: true });
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // while streaming, follow along only if the user hasn't scrolled away.
-  // instant (not smooth) so rapid token updates don't spawn overlapping
-  // scroll animations that re-trigger the bug above.
   useEffect(() => {
     if (shouldAutoScroll.current) {
       scrollToBottom(false);
     }
   }, [messages, isStreaming, scrollToBottom]);
 
-  // sending a new message should always snap to bottom and resume follow mode
   useEffect(() => {
     if (messages.length === 0) return;
     const lastMsg = messages[messages.length - 1];
