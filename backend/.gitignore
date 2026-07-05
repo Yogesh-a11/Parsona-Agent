@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Environment files (NEVER commit secrets — add real values in Render dashboard)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
