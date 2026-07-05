@@ -19,7 +19,7 @@ export default function App() {
   } = useChat();
 
   // Desktop: sidebar visible by default; mobile: hidden by default
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
 
   // Apply persona class to body for CSS variable switching
   useEffect(() => {
@@ -37,13 +37,27 @@ export default function App() {
     }
   }, [error, clearError]);
 
+  const handleSwitchPersona = (personaId) => {
+    switchPersona(personaId);
+    if (window.innerWidth <= 768) {
+      setSidebarOpen(false);
+    }
+  };
+
+  const handleClearHistory = () => {
+    clearHistory();
+    if (window.innerWidth <= 768) {
+      setSidebarOpen(false);
+    }
+  };
+
   return (
     <div className={`app-layout persona-${activePersona}`}>
       {/* Sidebar */}
       <Sidebar
         activePersona={activePersona}
-        onSwitchPersona={switchPersona}
-        onClearHistory={clearHistory}
+        onSwitchPersona={handleSwitchPersona}
+        onClearHistory={handleClearHistory}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
@@ -72,16 +86,6 @@ export default function App() {
           isDisabled={isStreaming}
         />
       </main>
-
-      {/* Mobile FAB */}
-      <button
-        className="mobile-sidebar-btn"
-        onClick={() => setSidebarOpen(true)}
-        aria-label="Open sidebar"
-        id="mobile-sidebar-fab"
-      >
-        🤖
-      </button>
 
       {/* Error Toast */}
       {error && (
