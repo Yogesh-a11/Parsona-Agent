@@ -59,7 +59,7 @@ async function streamChatCompletion(res, personaId, messages) {
       max_tokens: 1024,
       temperature: 0.85,
       presence_penalty: 0.1,
-      frequency_penalty: 0.1,
+      frequency_penalty: 0.4,
     });
 
     for await (const chunk of stream) {
@@ -96,6 +96,7 @@ async function chatCompletion(personaId, messages) {
     messages: contextMessages,
     max_tokens: 1024,
     temperature: 0.85,
+    frequency_penalty: 0.4,
   });
 
   return completion.choices[0]?.message?.content || "";

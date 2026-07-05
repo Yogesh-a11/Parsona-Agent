@@ -15,6 +15,7 @@ const generalLimiter = rateLimit({
     error: "Too many requests. Please try again in 15 minutes.",
     retryAfter: "15 minutes",
   },
+  skip: (req) => req.path === "/health" ||  req.path === "/api/health"
 });
 
 const chatLimiter = rateLimit({
